@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="description"
+    content="EchoVault is a private digital time capsule."
+  >
+
+  <title>EchoVault — Notes for Your Future Self</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="noise" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <a class="brand" href="#">
+      <span class="brand-mark">E</span>
+      EchoVault
+    </a>
+
+    <div class="header-actions">
+      <button
+        class="icon-button"
+        id="themeButton"
+        aria-label="Change theme"
+        title="Change theme"
+      >
+        ◐
+      </button>
+
+      <button class="button secondary" id="exportButton">
+        Export Vault
+      </button>
+
+      <label class="button secondary file-button">
+        Import
+        <input
+          id="importInput"
+          type="file"
+          accept="application/json"
+        >
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">A QUIET PLACE IN TIME</p>
+
+        <h1>
+          Leave something meaningful for
+          <em>later.</em>
+        </h1>
+
+        <p class="hero-text">
+          Capture a thought, promise, lesson, or tiny moment.
+          Seal it now and let the future open it.
+        </p>
+
+        <button class="button primary" id="openComposer">
+          Create a capsule <span>↗</span>
+        </button>
+      </div>
+
+      <div class="orbit" aria-hidden="true">
+        <div class="orbit-ring ring-one"></div>
+        <div class="orbit-ring ring-two"></div>
+
+        <div class="planet">
+          <span>✦</span>
+        </div>
+
+        <span class="orbit-word word-one">remember</span>
+        <span class="orbit-word word-two">become</span>
+        <span class="orbit-word word-three">return</span>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Vault summary">
+      <article>
+        <span id="totalCount">0</span>
+        <p>capsules created</p>
+      </article>
+
+      <article>
+        <span id="sealedCount">0</span>
+        <p>still sealed</p>
+      </article>
+
+      <article>
+        <span id="nextReveal">—</span>
+        <p>next reveal</p>
+      </article>
+    </section>
+
+    <section class="vault-section" id="vault">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">YOUR COLLECTION</p>
+          <h2>The vault</h2>
+        </div>
+
+        <div class="filters">
+          <label class="search">
+            <span>⌕</span>
+
+            <input
+              id="searchInput"
+              type="search"
+              placeholder="Search capsules"
+            >
+          </label>
+
+          <select id="filterSelect" aria-label="Filter capsules">
+            <option value="all">All capsules</option>
+            <option value="sealed">Sealed</option>
+            <option value="open">Ready to open</option>
+            <option value="favorite">Favorites</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="capsule-grid" id="capsuleGrid"></div>
+
+      <div class="empty-state" id="emptyState">
+        <div class="empty-icon">◇</div>
+
+        <h3>Your future is waiting</h3>
+
+        <p>
+          Create your first capsule and give tomorrow something
+          to discover.
+        </p>
+
+        <button class="text-button" id="emptyCreate">
+          Create one now →
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <!-- Create capsule dialog -->
+  <dialog id="composerDialog">
+    <form id="capsuleForm" method="dialog">
+      <div class="dialog-head">
+        <div>
+          <p class="eyebrow">NEW MEMORY</p>
+          <h2>Seal a moment</h2>
+        </div>
+
+        <button
+          class="close-button"
+          type="button"
+          data-close
+          aria-label="Close"
+        >
+          ×
+        </button>
+      </div>
+
+      <label>
+        Capsule title
+
+        <input
+          id="titleInput"
+          maxlength="50"
+          required
+          placeholder="A note after graduation"
+        >
+      </label>
+
+      <label>
+        Your message
+
+        <textarea
+          id="messageInput"
+          maxlength="600"
+          required
+          placeholder="Write what you want your future self to remember..."
+        ></textarea>
+
+        <small>
+          <span id="charCount">0</span>/600
+        </small>
+      </label>
+
+      <div class="form-row">
+        <label>
+          Reveal date
+
+          <input
+            id="dateInput"
+            type="date"
+            required
+          >
+        </label>
+
+        <label>
+          Mood
+
+          <select id="moodInput">
+            <option value="Hopeful">☀ Hopeful</option>
+            <option value="Brave">◆ Brave</option>
+            <option value="Grateful">✦ Grateful</option>
+            <option value="Curious">◌ Curious</option>
+            <option value="Peaceful">≈ Peaceful</option>
+          </select>
+        </label>
+      </div>
+
+      <label>
+        Color signal
+
+        <div class="colors" id="colorPicker">
+          <button
+            type="button"
+            class="color active"
+            data-color="#a78bfa"
+            style="--swatch: #a78bfa"
+            aria-label="Purple"
+          ></button>
+
+          <button
+            type="button"
+            class="color"
+            data-color="#fb7185"
+            style="--swatch: #fb7185"
+            aria-label="Coral"
+          ></button>
+
+          <button
+            type="button"
+            class="color"
+            data-color="#34d399"
+            style="--swatch: #34d399"
+            aria-label="Mint"
+          ></button>
+
+          <button
+            type="button"
+            class="color"
+            data-color="#60a5fa"
+            style="--swatch: #60a5fa"
+            aria-label="Blue"
+          ></button>
+
+          <button
+            type="button"
+            class="color"
+            data-color="#fbbf24"
+            style="--swatch: #fbbf24"
+            aria-label="Gold"
+          ></button>
+        </div>
+      </label>
+
+      <div class="privacy-note">
+        ⌁ Stored only in this browser. Nothing is uploaded.
+      </div>
+
+      <button class="button primary full" type="submit">
+        Seal the capsule
+      </button>
+    </form>
+  </dialog>
+
+  <!-- Capsule reader dialog -->
+  <dialog id="readerDialog" class="reader-dialog">
+    <div id="readerContent"></div>
+
+    <button
+      class="close-button reader-close"
+      type="button"
+      data-reader-close
+      aria-label="Close"
+    >
+      ×
+    </button>
+  </dialog>
+
+  <div class="toast" id="toast" role="status"></div>
+
+  <footer>
+    <span>EchoVault</span>
+
+    <p>Made for the person you are becoming.</p>
+
+    <button id="clearButton">
+      Reset vault
+    </button>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
